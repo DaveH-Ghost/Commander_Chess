@@ -92,7 +92,7 @@ requires-dist = [
     { name = "fastapi", specifier = ">=0.115.0" },
     { name = "python-chess", specifier = ">=1.11.0" },
     { name = "python-dotenv", specifier = ">=1.0.0" },
-    { name = "realm-fabric", editable = "../Realm-Fabric" },
+    { name = "realm-fabric", specifier = ">=0.7.1,<0.8" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.32.0" },
 ]
 
@@ -589,25 +589,18 @@ wheels = [
 
 [[package]]
 name = "realm-fabric"
-version = "0.7.0"
-source = { editable = "../Realm-Fabric" }
+version = "0.7.1"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "openai" },
     { name = "pydantic" },
     { name = "python-dotenv" },
     { name = "rich" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "openai" },
-    { name = "pydantic" },
-    { name = "python-dotenv" },
-    { name = "rich" },
+sdist = { url = "https://files.pythonhosted.org/packages/ba/06/d4ac6203dc78e16f817175bd7af2f2dec22b7fd9eb37bd5d481cf262f070/realm_fabric-0.7.1.tar.gz", hash = "sha256:7d00a7e3fc247bf030a97cc01a4c16b5e14217d716a3a0a9ee23d179c00ef71f", size = 96281, upload-time = "2026-07-03T08:33:16.968Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/84/69/1001080fc5bbff181b8fafc432526e1c84d4913ab7a25a65b3158f55bcf8/realm_fabric-0.7.1-py3-none-any.whl", hash = "sha256:657eddcaf5f77cefe8c39ed9376afa25498dbbe12087c01605235d028685d853", size = 127236, upload-time = "2026-07-03T08:33:15.255Z" },
 ]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=9.0.3" }]
 
 [[package]]
 name = "rich"

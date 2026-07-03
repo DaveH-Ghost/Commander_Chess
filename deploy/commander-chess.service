@@ -1,0 +1,15 @@
+[Unit]
+Description=Commander Chess
+After=network.target
+
+[Service]
+Type=simple
+User=david
+WorkingDirectory=/home/david/apps/Commander__Chess
+EnvironmentFile=/home/david/apps/Commander__Chess/.env
+ExecStart=/home/david/.local/bin/uv run uvicorn commander_chess.app:app --host 127.0.0.1 --port 8775
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

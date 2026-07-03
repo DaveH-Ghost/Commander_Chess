@@ -1,0 +1,14 @@
+.env
+.env.local
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+.DS_Store
+Thumbs.db
+
+# Optional: uncomment while hacking Realm Fabric locally (do not commit)
+# pyproject.toml -> [tool.uv.sources] path override

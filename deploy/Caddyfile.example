@@ -1,0 +1,6 @@
+# Install: sudo apt install caddy
+# Place at /etc/caddy/Caddyfile (adjust domain and paths)
+
+chess.example.com {
+    reverse_proxy 127.0.0.1:8775
+}

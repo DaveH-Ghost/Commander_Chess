@@ -3,9 +3,10 @@ name = "commander-chess"
 version = "0.1.0"
 description = "Commander Chess — a Realm Fabric demo: you command pieces, they choose moves"
 readme = "README.md"
+license = "MIT"
 requires-python = ">=3.11"
 dependencies = [
-    "realm-fabric",
+    "realm-fabric>=0.7.1,<0.8",
     "python-chess>=1.11.0",
     "fastapi>=0.115.0",
     "uvicorn[standard]>=0.32.0",
@@ -20,9 +21,6 @@ dev = [
 
 [project.scripts]
 commander-chess = "commander_chess.main:main"
-
-[tool.uv.sources]
-realm-fabric = { path = "../Realm-Fabric", editable = true }
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
