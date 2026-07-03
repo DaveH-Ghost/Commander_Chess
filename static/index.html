@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commander Chess</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div id="team-screen" class="team-screen">
+    <div class="team-card">
+      <h1>Commander Chess</h1>
+
+      <div id="landing-picker">
+        <p class="tagline">Two-player game — open each link in a <strong>separate</strong> browser tab or window.</p>
+        <div class="team-options">
+          <div class="team-option">
+            <a class="team-btn" href="/white">White player → open this link</a>
+            <p class="hint">Set order refresh on the White screen before the game starts.</p>
+          </div>
+          <a class="team-btn team-btn-dark" href="/black">Black player → open this link</a>
+        </div>
+        <p id="lobby-status" class="lobby-status"></p>
+      </div>
+
+      <div id="side-join-panel" class="hidden">
+        <p id="side-role-label" class="tagline"></p>
+        <p id="side-join-status" class="lobby-status"></p>
+        <label id="white-interval-setup" class="order-interval-label hidden">
+          Order refresh every
+          <input type="number" id="lobby-order-interval" min="1" max="50" value="5" />
+          plies
+        </label>
+        <button id="side-retry" class="team-btn hidden">Try again</button>
+        <p class="hint"><a href="/">← Back to setup links</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="game-screen" class="layout hidden">
+    <header>
+      <h1>Commander Chess</h1>
+      <p id="role-tag" class="tagline"></p>
+    </header>
+
+    <main>
+      <section class="panel board-panel">
+        <h2>Battlefield</h2>
+        <p class="legend">Click a highlighted allied piece. King: click piece, then destination.</p>
+        <div id="board-wrap" class="board-wrap">
+          <div id="board-grid" class="board-grid"></div>
+        </div>
+        <div id="status" class="status"></div>
+      </section>
+
+      <section class="panel side-panel">
+        <div id="order-section" class="block hidden">
+          <h2>Issue Orders</h2>
+          <p class="hint">140 characters max. Pieces interpret these when they act.</p>
+          <textarea id="order-input" maxlength="140" rows="3" placeholder="Control the center. Protect the king. Advance when safe."></textarea>
+          <div class="row">
+            <span id="char-count">0/140</span>
+            <button id="submit-order">Send Orders</button>
+          </div>
+        </div>
+
+        <div id="reasoning-section" class="block hidden">
+          <h2>Last reasoning</h2>
+          <p id="reasoning-text"></p>
+        </div>
+
+        <div id="game-over-section" class="block game-over-panel hidden">
+          <h2 id="game-over-title"></h2>
+          <p id="game-over-detail" class="hint"></p>
+          <button id="return-setup" class="team-btn">Return to setup</button>
+        </div>
+
+        <div class="block settings" id="game-settings">
+          <h2>Game</h2>
+          <label id="order-interval-row" class="order-interval-row hidden">
+            Order refresh every
+            <input type="number" id="order-interval" min="1" max="50" value="5" />
+            plies
+          </label>
+          <button id="concede" class="secondary danger">Concede</button>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
