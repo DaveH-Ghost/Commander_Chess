@@ -152,10 +152,7 @@ class SessionStore:
             self.black_seat = PlayerSeat(token=black_token, color="black")
         self.game.phase = "needs_order"
         self.game.pending_color = chess.WHITE
-        self.game.status_message = (
-            "White commander: issue opening orders (140 characters). "
-            "UPPERCASE letters in the battlefield view are your allies; lowercase are enemies."
-        )
+        self.game.status_message = "White commander: issue opening orders (140 characters)."
 
 
 def get_store() -> SessionStore:

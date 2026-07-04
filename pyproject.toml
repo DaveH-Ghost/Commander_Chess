@@ -1,6 +1,6 @@
 [project]
 name = "commander-chess"
-version = "0.1.0"
+version = "0.2.0"
 description = "Commander Chess — a Realm Fabric demo: you command pieces, they choose moves"
 readme = "README.md"
 license = "MIT"

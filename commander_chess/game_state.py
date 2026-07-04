@@ -194,8 +194,20 @@ class GameState:
     ) -> None:
         from_square = move.from_square
         to_square = move.to_square
-        captured = self.board.piece_at(to_square)
-        captured_id = self.agent_by_square.get(to_square) if captured else None
+
+        # Special moves relocate/capture pieces on squares other than to_square.
+        is_castling = self.board.is_castling(move)
+        is_kingside = self.board.is_kingside_castling(move)
+        is_en_passant = self.board.is_en_passant(move)
+        if is_en_passant:
+            captured_square = chess.square(
+                chess.square_file(to_square), chess.square_rank(from_square)
+            )
+        else:
+            captured_square = to_square
+
+        captured = self.board.piece_at(captured_square)
+        captured_id = self.agent_by_square.get(captured_square) if captured else None
         moving_agent_id = self.agent_by_square.get(from_square)
         san = self.board.san(move)
         is_white = self.board.turn == chess.WHITE
@@ -206,22 +218,26 @@ class GameState:
         self.last_reasoning = reasoning
         self.last_reasoning_side = "white" if is_white else "black"
 
-        if moving_agent_id:
-            agent = session.get_agent(moving_agent_id)
-            if agent:
-                agent.position = square_to_pos(to_square)
-                meta = json.loads(agent.private_data or "{}")
-                meta["square"] = square_name(to_square)
-                agent.private_data = json.dumps(meta)
-                self.square_by_agent[moving_agent_id] = to_square
-                self.agent_by_square.pop(from_square, None)
-                self.agent_by_square[to_square] = moving_agent_id
+        self._relocate_agent(session, from_square, to_square)
+
+        # Castling also moves the rook; keep its agent mapping in sync so it
+        # stays selectable from its new square.
+        if is_castling:
+            rank = chess.square_rank(to_square)
+            if is_kingside:
+                rook_from = chess.square(7, rank)
+                rook_to = chess.square(5, rank)
+            else:
+                rook_from = chess.square(0, rank)
+                rook_to = chess.square(3, rank)
+            self._relocate_agent(session, rook_from, rook_to)
 
         if captured_id and captured_id != moving_agent_id:
             self.square_by_agent.pop(captured_id, None)
+            if self.agent_by_square.get(captured_square) == captured_id:
+                self.agent_by_square.pop(captured_square, None)
             session.delete_agent(captured_id)
 
-        self._append_move_to_memory(session, san, is_white=is_white)
         self.selected_agent_id = None
         self.selected_square = None
 
@@ -230,6 +246,23 @@ class GameState:
             self._set_game_over_message()
             return
         self.begin_turn_cycle()
+
+    def _relocate_agent(
+        self, session: Session, from_square: chess.Square, to_square: chess.Square
+    ) -> None:
+        """Move the agent occupying from_square to to_square (position, meta, maps)."""
+        agent_id = self.agent_by_square.get(from_square)
+        if not agent_id:
+            return
+        agent = session.get_agent(agent_id)
+        if agent:
+            agent.position = square_to_pos(to_square)
+            meta = json.loads(agent.private_data or "{}")
+            meta["square"] = square_name(to_square)
+            agent.private_data = json.dumps(meta)
+        self.square_by_agent[agent_id] = to_square
+        self.agent_by_square.pop(from_square, None)
+        self.agent_by_square[to_square] = agent_id
 
     def _record_order_to_memory(
         self, session: Session, color: chess.Color, text: str
@@ -245,14 +278,6 @@ class GameState:
                 if not is_commander_orders_module(module):
                     continue
                 module.add_order(turn, text, side=side)
-
-    def _append_move_to_memory(self, session: Session, san: str, *, is_white: bool) -> None:
-        for area in session.areas.values():
-            for agent in area.agents:
-                module = agent.memory.module
-                if not is_commander_orders_module(module):
-                    continue
-                module.append_ply(self.ply_count, san, is_white=is_white)
 
     def _set_game_over_message(self) -> None:
         if self.board.is_checkmate():

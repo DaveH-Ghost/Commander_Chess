@@ -589,7 +589,7 @@ wheels = [
 
 [[package]]
 name = "realm-fabric"
-version = "0.7.1"
+version = "0.7.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "openai" },
@@ -597,9 +597,9 @@ dependencies = [
     { name = "python-dotenv" },
     { name = "rich" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ba/06/d4ac6203dc78e16f817175bd7af2f2dec22b7fd9eb37bd5d481cf262f070/realm_fabric-0.7.1.tar.gz", hash = "sha256:7d00a7e3fc247bf030a97cc01a4c16b5e14217d716a3a0a9ee23d179c00ef71f", size = 96281, upload-time = "2026-07-03T08:33:16.968Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/db/ae/f2281373a89ff6f9ec3f43187223d5d4606d51f65f62f104050d12ee968f/realm_fabric-0.7.2.tar.gz", hash = "sha256:0f2b61270bd45d939e9d5be06c19479511a0bc4fcd9ff141bb8db27a3826c60f", size = 96042, upload-time = "2026-07-03T09:32:58.644Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/84/69/1001080fc5bbff181b8fafc432526e1c84d4913ab7a25a65b3158f55bcf8/realm_fabric-0.7.1-py3-none-any.whl", hash = "sha256:657eddcaf5f77cefe8c39ed9376afa25498dbbe12087c01605235d028685d853", size = 127236, upload-time = "2026-07-03T08:33:15.255Z" },
+    { url = "https://files.pythonhosted.org/packages/f8/f0/fb9a571520cfb1c8a9027168a8c24bf5f70f111d9782467bed20e5480fec/realm_fabric-0.7.2-py3-none-any.whl", hash = "sha256:d3d110d1ac2737a0a0f7f93a2c403ef976d3dc3cf5e19a2d3c667f5f468a224a", size = 127805, upload-time = "2026-07-03T09:32:56.857Z" },
 ]
 
 [[package]]

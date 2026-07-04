@@ -32,7 +32,7 @@ def test_isinstance_fails_for_dynamically_loaded_module() -> None:
     assert not isinstance(module, CommanderOrdersModule)
 
 
-def test_moves_recorded_in_piece_memory_after_apply() -> None:
+def test_orders_recorded_but_moves_are_not() -> None:
     session, game = create_session()
     game.phase = "needs_order"
     game.pending_color = chess.WHITE
@@ -46,10 +46,11 @@ def test_moves_recorded_in_piece_memory_after_apply() -> None:
 
     agent = _agent_by_name(session, "Black Queen")
     rendered = _render_for_agent(session, agent)
-    assert "No orders or moves recorded yet" not in rendered
-    assert "e4" in rendered
-    assert "e5" in rendered
+    assert "No orders from your commander yet" not in rendered
     assert "Turn 1 order: Keep winning!" in rendered
+    # Move history is no longer stored in piece memory.
+    assert "e4" not in rendered
+    assert "e5" not in rendered
 
 
 def test_black_piece_does_not_see_white_orders() -> None:
@@ -66,7 +67,6 @@ def test_black_piece_does_not_see_white_orders() -> None:
 
     assert "Win the game!" not in black_rendered
     assert "Win the game!" in white_rendered
-    assert "Nf3" in black_rendered
 
 
 def test_standing_order_not_re_recorded_each_ply() -> None:
@@ -91,7 +91,7 @@ def test_standing_order_not_re_recorded_each_ply() -> None:
     assert "Turn 3 order:" not in rendered
 
 
-def test_order_shows_with_matching_move_only() -> None:
+def test_each_side_sees_only_its_own_orders() -> None:
     session, game = create_session()
     game.phase = "needs_order"
     game.pending_color = chess.WHITE
@@ -107,11 +107,13 @@ def test_order_shows_with_matching_move_only() -> None:
     white_rendered = _render_for_agent(session, _agent_by_name(session, "White Knight"))
     black_rendered = _render_for_agent(session, _agent_by_name(session, "Black Queen"))
 
-    white_lines = white_rendered.split("\n")
-    turn1_idx = next(i for i, line in enumerate(white_lines) if line.startswith("Turn 1 order:"))
-    assert "1." in white_lines[turn1_idx + 1]
+    assert "Open with tempo!" in white_rendered
     assert "Counter in the center!" not in white_rendered
 
-    black_lines = black_rendered.split("\n")
-    turn2_idx = next(i for i, line in enumerate(black_lines) if line.startswith("Turn 2 order:"))
-    assert "2." in black_lines[turn2_idx + 1]
+    assert "Counter in the center!" in black_rendered
+    assert "Open with tempo!" not in black_rendered
+
+    # No move notation in either side's memory.
+    for rendered in (white_rendered, black_rendered):
+        assert "Nf3" not in rendered
+        assert "1." not in rendered
